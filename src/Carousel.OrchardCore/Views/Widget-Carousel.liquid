@@ -5,24 +5,24 @@
 {% assign keyboard = Model.ContentItem.Content.Carousel.Keyboard.Value %}
 {% assign pause = Model.ContentItem.Content.Carousel.Pause.Value %}
 
-<div id="{{ id }}" class="carousel slide" data-interval="{{ interval }}"{% if ride %} data-ride="carousel"{% endif %}{% if wrap == false %} data-wrap="false"{% endif %}{% if pause == false %} data-pause="false"{% endif %}{% if keyboard == false %} data-keyboard="false"{% endif %}>
+<div id="{{ id }}" class="carousel slide carousel-fade" data-interval="{{ interval }}"{% if ride %} data-ride="carousel"{% endif %}{% if wrap == false %} data-wrap="false"{% endif %}{% if pause == false %} data-pause="false"{% endif %}{% if keyboard == false %} data-keyboard="false"{% endif %}>
     {% if Model.ContentItem.Content.Carousel.IncludeIndicators.Value %}
-        <ol class="carousel-indicators">
+        <div class="carousel-indicators">
             {% assign slideTo = 0 %}
             {% for slide in Model.ContentItem.Content.Slides.ContentItems %}
-                <li data-target="#{{ id }}" data-slide-to="{{ slideTo }}"{% if slideTo == 0 %} class="active"{% endif %}></li>
+                <button data-bs-target="#{{ id }}" data-bs-slide-to="{{ slideTo }}"{% if slideTo == 0 %} class="active"{% endif %}></button>
                 {% assign slideTo = slideTo + 1 %}
             {% endfor %}
-        </ol>
+        </div>
     {% endif %}
     <div class="carousel-inner">
         {% assign active = " active" %}
         {% for slide in Model.ContentItem.Content.Slides.ContentItems %}
             <div class="carousel-item{{active}}">
-                <img{% if slide.Slide.ImageClass.Text.size > 0 %} class="{{ slide.Slide.ImageClass.Text }}"{% endif %} src="{{ slide.Slide.Image.Paths.first | asset_url }}"{% if slide.Slide.ImageAltText.Text.size > 0 %} alt="{{ slide.Slide.ImageAltText.Text }}"{% endif %}>
+                <img{% if slide.Slide.ImageClass.Text.size > 0 %} class="d-block w-100"{% endif %} src="{{ slide.Slide.Image.Paths.first | asset_url }}"{% if slide.Slide.ImageAltText.Text.size > 0 %} alt="{{ slide.Slide.ImageAltText.Text }}"{% endif %}/>
                 {% if slide.Slide.DisplayCaption.Value %}
                     <div class="carousel-caption d-none d-md-block">
-                        {{ slide.Slide.Caption.Html | raw }}
+                        <h5>{{ slide.Slide.Caption.Html | raw }}</h5>
                     </div>
                 {% endif %}
             </div>
@@ -30,13 +30,13 @@
         {% endfor %}
     </div>
     {% if Model.ContentItem.Content.Carousel.IncludeControls.Value %}
-        <a class="carousel-control-prev" href="#{{ id }}" role="button" data-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="{{ id }}" role="button" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#{{ id }}" role="button" data-slide="next">
+        </button>
+        <button class="carousel-control-next" type="button"  data-bs-target="{{ id }}" role="button" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
-        </a>
+        </button>
     {% endif %}
 </div>
