@@ -5,16 +5,20 @@ using OrchardCore.Data.Migration;
 using OrchardCore.Flows.Models;
 using OrchardCore.Media.Settings;
 
-namespace Carousel.OrchardCore {
-    public class Migrations : DataMigration {
+namespace Carousel.OrchardCore
+{
+    public class Migrations : DataMigration
+    {
         private readonly IContentDefinitionManager _contentDefinitionManager;
 
-        public Migrations(IContentDefinitionManager contentDefinitionManager) {
+        public Migrations(IContentDefinitionManager contentDefinitionManager)
+        {
             _contentDefinitionManager = contentDefinitionManager;
         }
 
-        public int Create() {
-            _contentDefinitionManager.AlterPartDefinition("Slide", cfg => cfg
+        public int Create()
+        {
+            _contentDefinitionManager.AlterPartDefinitionAsync("Slide", cfg => cfg
                 .WithDescription("Contains the fields for the current type")
                 .WithField("Caption",
                     fieldBuilder => fieldBuilder
@@ -29,7 +33,7 @@ namespace Carousel.OrchardCore {
                     fieldBuilder => fieldBuilder
                         .OfType("MediaField")
                         .WithDisplayName("Image")
-                        .WithSettings(new MediaFieldSettings { Required = true, Multiple = false}))
+                        .WithSettings(new MediaFieldSettings { Required = true, Multiple = false }))
                 .WithField("ImageClass",
                     fieldBuilder => fieldBuilder
                         .OfType("TextField")
@@ -40,10 +44,10 @@ namespace Carousel.OrchardCore {
                         .WithDisplayName("Image Alt Text"))
             );
 
-            _contentDefinitionManager.AlterTypeDefinition("Slide", type => type
+            _contentDefinitionManager.AlterTypeDefinitionAsync("Slide", type => type
                 .WithPart("Slide"));
 
-            _contentDefinitionManager.AlterPartDefinition("Carousel", cfg => cfg
+            _contentDefinitionManager.AlterPartDefinitionAsync("Carousel", cfg => cfg
                 .WithDescription("Contains the fields for the current type")
                 .WithField("Interval",
                     fieldBuilder => fieldBuilder
@@ -76,7 +80,7 @@ namespace Carousel.OrchardCore {
                         .WithDisplayName("Pause on hover/touch"))
             );
 
-            _contentDefinitionManager.AlterTypeDefinition("Carousel", type => type
+            _contentDefinitionManager.AlterTypeDefinitionAsync("Carousel", type => type
                 .WithPart("Carousel")
                 .WithPart("Slides", "BagPart", cfg => cfg
                     .WithDisplayName("Slides")
