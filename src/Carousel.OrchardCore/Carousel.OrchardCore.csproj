@@ -1,18 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <Authors>Michael Tran</Authors>
+    <Description>Adds a Bootstrap 5 Carousel Widget.</Description>
+    <Copyright>Michael Tran</Copyright>
+    <PackageProjectUrl>https://github.com/tranpl/Carousel</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/tranpl/Carousel</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.Module.Targets" Version="1.0.0-rc2-13450" />
-    <PackageReference Include="OrchardCore.ContentFields" Version="1.0.0-rc2-13450" />
-    <PackageReference Include="OrchardCore.ContentManagement.Abstractions" Version="1.0.0-rc2-13450" />
-    <PackageReference Include="OrchardCore.Data.Abstractions" Version="1.0.0-rc2-13450" />
-    <PackageReference Include="OrchardCore.DisplayManagement" Version="1.0.0-rc2-13450" />
-    <PackageReference Include="OrchardCore.Flows" Version="1.0.0-rc2-13450" />
-    <PackageReference Include="OrchardCore.Media" Version="1.0.0-rc2-13450" />
+    <PackageReference Include="OrchardCore.Module.Targets" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.ContentFields" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.ContentManagement.Abstractions" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Data.Abstractions" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.DisplayManagement" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Flows" Version="2.1.6" />
+    <PackageReference Include="OrchardCore.Media" Version="2.1.6" />
   </ItemGroup>
 
 </Project>
