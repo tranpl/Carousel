@@ -5,20 +5,22 @@ using OrchardCore.Data.Migration;
 using OrchardCore.Flows.Models;
 using OrchardCore.Media.Settings;
 
-namespace Carousel.OrchardCore
+using System.Threading.Tasks;
+
+namespace Carousel.OrchardCore.Migrations
 {
-    public class Migrations : DataMigration
+    public class CarouselMigrations : DataMigration
     {
         private readonly IContentDefinitionManager _contentDefinitionManager;
 
-        public Migrations(IContentDefinitionManager contentDefinitionManager)
+        public CarouselMigrations(IContentDefinitionManager contentDefinitionManager)
         {
             _contentDefinitionManager = contentDefinitionManager;
         }
 
-        public int Create()
+        public async Task<int> CreateAsync()
         {
-            _contentDefinitionManager.AlterPartDefinitionAsync("Slide", cfg => cfg
+            await _contentDefinitionManager.AlterPartDefinitionAsync("Slide", cfg => cfg
                 .WithDescription("Contains the fields for the current type")
                 .WithField("Caption",
                     fieldBuilder => fieldBuilder
@@ -44,10 +46,10 @@ namespace Carousel.OrchardCore
                         .WithDisplayName("Image Alt Text"))
             );
 
-            _contentDefinitionManager.AlterTypeDefinitionAsync("Slide", type => type
+            await _contentDefinitionManager.AlterTypeDefinitionAsync("Slide", type => type
                 .WithPart("Slide"));
 
-            _contentDefinitionManager.AlterPartDefinitionAsync("Carousel", cfg => cfg
+            await _contentDefinitionManager.AlterPartDefinitionAsync("Carousel", cfg => cfg
                 .WithDescription("Contains the fields for the current type")
                 .WithField("Interval",
                     fieldBuilder => fieldBuilder
@@ -80,15 +82,43 @@ namespace Carousel.OrchardCore
                         .WithDisplayName("Pause on hover/touch"))
             );
 
-            _contentDefinitionManager.AlterTypeDefinitionAsync("Carousel", type => type
-                .WithPart("Carousel")
-                .WithPart("Slides", "BagPart", cfg => cfg
-                    .WithDisplayName("Slides")
-                    .WithDescription("Slides to display in the carousel.")
-                    .WithSettings(new BagPartSettings { ContainedContentTypes = new[] { "Slide" }, DisplayType = "Detail" }))
-                .Stereotype("Widget"));
+            await _contentDefinitionManager.AlterTypeDefinitionAsync("Carousel", type => type
+                 .WithPart("Carousel")
+                 .WithPart("Slides", "BagPart", cfg => cfg
+                     .WithDisplayName("Slides")
+                     .WithDescription("Slides to display in the carousel.")
+                     .WithSettings(new BagPartSettings { ContainedContentTypes = new[] { "Slide" }, DisplayType = "Detail" }))
+                 .Stereotype("Widget"));
 
             return 1;
+        }
+        public async Task<int> UpdateFrom1Async()
+        {
+            await _contentDefinitionManager.AlterPartDefinitionAsync(
+                "Carousel",
+                cfg => cfg
+                .WithDescription("Define extra class for the Carousel")
+                .WithField("CarouselClass",
+                fieldBuilder => fieldBuilder
+                    .OfType("TextField")
+                    .WithDisplayName("Carousel Class"))
+                );
+            return 2;
+        }
+        public async Task<int> UpdateFrom2Async()
+        {
+            // Add MobileImage field to Slide part
+            await _contentDefinitionManager.AlterPartDefinitionAsync(
+                "Slide",
+                cfg => cfg
+                    .WithField("MobileImage",
+                        fieldBuilder => fieldBuilder
+                            .OfType("MediaField")
+                            .WithDisplayName("Mobile Image")
+                            .WithSettings(new MediaFieldSettings { Required = false, Multiple = false }))
+            );
+
+            return 3;
         }
     }
 }

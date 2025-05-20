@@ -1,0 +1,175 @@
+@using OrchardCore.ContentManagement
+@using Newtonsoft.Json.Linq
+@using System.Dynamic
+
+@{
+    // Get the content item
+    var contentItem = Model.ContentItem;
+
+    // Access content as dynamic objects
+    dynamic content = contentItem.Content;
+    var Slides = content.Slides;
+    var carousel = content.Carousel;
+    // Try to access the slides content items using dynamic approach
+    var slideItems = new List<dynamic>();
+
+    try
+    {
+        // Attempt to get slides from the content
+        if(content.Slides != null && content.Slides.ContentItems != null)
+        {
+            foreach(var item in content.Slides.ContentItems)
+            {
+                slideItems.Add(item);
+            }
+        }
+    }
+    catch(Exception ex)
+    {
+        <div class="alert alert-danger">Error accessing slides: @ex.Message</div>
+    }
+
+    // Generate a unique ID for this carousel
+    var carouselId = "carousel-" + contentItem.ContentItemId.ToString().Replace(".", "-");
+
+    // Optional: Get carousel settings
+    bool autoPlay = false;
+    int interval = 5000;
+    string carouselClass = "";
+    if(content.Carousel.CarouselClass != null)
+    {
+        carouselClass = carousel.CarouselClass.Text;
+    }
+    try
+    {
+        if(content.Carousel != null)
+        {
+            if(content.Carousel.Ride != null && content.Carousel.Ride.Value != null)
+            {
+                autoPlay = bool.TryParse(content.Carousel.Ride.Value.ToString(), out bool result) && result;
+            }
+
+            if(content.Carousel.Interval != null && content.Carousel.Interval.Value != null)
+            {
+                interval = int.TryParse(content.Carousel.Interval.Value.ToString(), out int result) ? result : 5000;
+            }
+        }
+    }
+    catch
+    {
+        // Use default values if settings can't be accessed
+    }
+}
+<div id="@carouselId" class="carousel slide @carouselClass" data-bs-ride="carousel">
+    @if(slideItems.Count > 0)
+    {
+        <div class="carousel-indicators">
+            @for(int i = 0; i < slideItems.Count; i++)
+            {
+                <button type="button" data-bs-target="#@carouselId" data-bs-slide-to="@i"
+                        class="@(i == 0 ? "active" : "")"
+                        aria-current="@(i == 0 ? "true" : "false")"
+                        aria-label="Slide @(i+1)"></button>
+            }
+        </div>
+
+        <div class="carousel-inner">
+            @for(int i = 0; i < slideItems.Count; i++)
+            {
+                var slide = slideItems[i];
+                string imagePath = "";
+                string mobileImagePath = "";
+                string captionHtml = "";
+                bool displayCaption = false;
+                string imageClass = "w-100";
+                string altText = "";
+
+                try
+                {
+                    // Access slide properties using dynamic approach
+                    if(slide.Slide != null)
+                    {
+                        if(slide.Slide.Image != null && slide.Slide.Image.Paths != null && slide.Slide.Image.Paths.Count > 0)
+                        {
+                            imagePath = slide.Slide.Image.Paths[0].ToString();
+                        }
+
+                        if(slide.Slide.MobileImage != null && slide.Slide.MobileImage.Paths != null && slide.Slide.MobileImage.Paths.Count > 0)
+                        {
+                            mobileImagePath = slide.Slide.MobileImage.Paths[0].ToString();
+                        }
+
+                        if(slide.Slide.Caption != null && slide.Slide.Caption.Html != null)
+                        {
+                            captionHtml = slide.Slide.Caption.Html.ToString();
+                        }
+
+                        if(slide.Slide.DisplayCaption != null && slide.Slide.DisplayCaption.Value != null)
+                        {
+                            displayCaption = bool.TryParse(slide.Slide.DisplayCaption.Value.ToString(), out bool result) && result;
+                        }
+
+                        if(slide.Slide.ImageClass != null && slide.Slide.ImageClass.Text != null)
+                        {
+                            string text = slide.Slide.ImageClass.Text.ToString();
+                            if(!string.IsNullOrEmpty(text))
+                            {
+                                imageClass = text;
+                            }
+                        }
+
+                        if(slide.Slide.ImageAltText != null && slide.Slide.ImageAltText.Text != null)
+                        {
+                            string text = slide.Slide.ImageAltText.Text.ToString();
+                            if(!string.IsNullOrEmpty(text))
+                            {
+                                altText = text;
+                            }
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    <div class="alert alert-warning">Error processing slide @(i + 1): @ex.Message</div>
+                    continue;
+                }
+
+                <div class="carousel-item @(i == 0 ? "active" : "")" data-bs-interval=@interval>
+                    @if(!string.IsNullOrEmpty(imagePath))
+                    {
+                        <img src="/media/@Url.Content(imagePath)" class="carousel-img-desktop @imageClass" alt="@altText">
+                    }
+                    @if(!string.IsNullOrEmpty(mobileImagePath))
+                    {
+                        <img src="/media/@Url.Content(mobileImagePath)" class="carousel-img-mobile @imageClass" alt="@altText">
+                    }
+                    else
+                    {
+                        <img src="#" class="@imageClass" alt="Placeholder image">
+                    }
+
+                    @if(displayCaption && !string.IsNullOrEmpty(captionHtml))
+                    {
+                        <div class="carousel-caption">
+                            @Html.Raw(captionHtml)
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#@carouselId" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#@carouselId" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    }
+    else
+    {
+        <div class="alert alert-info">No slides available for this carousel.</div>
+    }
+</div>
+

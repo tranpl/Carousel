@@ -1,0 +1,12 @@
+{% assign json = Model.ContentItem.Content | json %}
+{{ Model.ContentItem.Id }}
+{{ Model.ContentItem.Content.CarouselPart.Items | size }}
+{{ Model.DisplayText }}
+<pre>{{ json }}</pre>
+<pre>{{ Model.ContentItem.Content }}</pre>
+
+{% assign user = User | user_id | users_by_id %}
+
+{{ user.UserName }} - {{ user.Email }}
+
+<pre>{{Model.Content}}</pre>

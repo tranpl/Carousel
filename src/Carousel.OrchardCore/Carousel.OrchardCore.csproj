@@ -1,23 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Authors>Michael Tran</Authors>
-    <Description>Adds a Bootstrap 5 Carousel Widget.</Description>
-    <Copyright>Michael Tran</Copyright>
-    <PackageProjectUrl>https://github.com/tranpl/Carousel</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/tranpl/Carousel</RepositoryUrl>
-  </PropertyGroup>
+	<PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+        <Authors>Michael Tran</Authors>
+        <Description>Adds a Bootstrap 5 Carousel Widget.</Description>
+        <Copyright>Michael Tran</Copyright>
+        <PackageProjectUrl>https://github.com/tranpl/Carousel</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/tranpl/Carousel</RepositoryUrl>
+        <Version>$(VersionPrefix)</Version>
+    </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.Module.Targets" Version="2.1.6" />
-    <PackageReference Include="OrchardCore.ContentFields" Version="2.1.6" />
-    <PackageReference Include="OrchardCore.ContentManagement.Abstractions" Version="2.1.6" />
-    <PackageReference Include="OrchardCore.Data.Abstractions" Version="2.1.6" />
-    <PackageReference Include="OrchardCore.DisplayManagement" Version="2.1.6" />
-    <PackageReference Include="OrchardCore.Flows" Version="2.1.6" />
-    <PackageReference Include="OrchardCore.Media" Version="2.1.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="OrchardCore.Module.Targets" Version="2.1.7" />
+    <PackageReference Include="OrchardCore.ContentFields" Version="2.1.7" />
+    <PackageReference Include="OrchardCore.ContentManagement.Abstractions" Version="2.1.7" />
+    <PackageReference Include="OrchardCore.Data.Abstractions" Version="2.1.7" />
+    <PackageReference Include="OrchardCore.DisplayManagement" Version="2.1.7" />
+    <PackageReference Include="OrchardCore.Flows" Version="2.1.7" />
+    <PackageReference Include="OrchardCore.Media" Version="2.1.7" />
   </ItemGroup>
 
 </Project>
